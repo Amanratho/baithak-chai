@@ -50,7 +50,7 @@ export const siteData = {
 
   navigation: [
     { label: "The Story", href: "#hero" },
-    { label: "3D Pouch", href: "#product-reveal" },
+    { label: "The Packaging", href: "#product-reveal" },
     { label: "Why Baithak", href: "#features" },
     { label: "Brewing Ritual", href: "#brewing" },
     { label: "Philosophy", href: "#philosophy" },
@@ -66,15 +66,14 @@ export const siteData = {
     englishSubtext:
       "Where the kettle boils, conversations begin, laughter returns, and bonds grow deeper. NICE & GOOD Baithak is an ode to the timeless Indian ritual of sharing heartfelt moments over a rich, golden cup.",
     ctaPrimary: "Order 500g Pack · ₹295",
-    ctaSecondary: "Explore 3D Pouch",
-    scrollHint: "Scroll to unveil the 3D packaging",
+    ctaSecondary: "View Product",
+    scrollHint: "Scroll to discover",
   },
 
   productReveal: {
-    badge: "Interactive 3D Experience",
-    sectionTitle: "Volumetric 3D Tea Packaging",
-    subtitle: "Filled with 500g of dense, aromatic CTC tea granules. Swipe or drag to rotate 360° and inspect every detail.",
-    dragHint: "👆 Swipe or Drag to Rotate 360° · Tap to Flip Front & Back",
+    badge: "Garden Fresh Harvest",
+    sectionTitle: "NICE & GOOD - Baithak Tea",
+    subtitle: "Finest Upper Assam CTC granules nitrogen-sealed in a 500g metallic freshness pouch.",
     floatingBadges: [
       {
         id: "veg",
