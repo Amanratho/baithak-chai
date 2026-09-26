@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --navy-dark: #050D1A;
+    --navy-card: #09172B;
+    --navy-border: #1B2F4E;
+    --gold-primary: #D4AF37;
+    --gold-bright: #F5D061;
+    --gold-light: #FFF0BD;
+    --cream-soft: #FBF9F5;
+    --cream-muted: #EBE4D5;
+  }
+
+  html {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+
+  .font-royal {
+    font-family: 'Cinzel', serif;
+  }
+}
+
+/* Lenis recommended CSS */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Custom Luxury Gradients & Utilities */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #FFE898 0%, #D4AF37 50%, #AA820A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gold-shimmer {
+  background: linear-gradient(90deg, #D4AF37 0%, #FFF3BF 50%, #D4AF37 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 4s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(135deg, #ECC440 0%, #D4AF37 50%, #B38612 100%);
+}
+
+.gold-glow {
+  box-shadow: 0 0 35px -5px rgba(212, 175, 55, 0.45);
+}
+
+.gold-glow-subtle {
+  box-shadow: 0 0 20px -3px rgba(212, 175, 55, 0.25);
+}
+
+.glass-navy {
+  background: rgba(9, 23, 43, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(212, 175, 55, 0.18);
+}
+
+.glass-cream {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #050D1A;
+}
+::-webkit-scrollbar-thumb {
+  background: #233753;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+}
