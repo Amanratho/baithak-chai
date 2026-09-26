@@ -31,6 +31,7 @@ export const siteData = {
   },
 
   orderSettings: {
+    googleSheetEndpoint: "https://script.google.com/macros/s/AKfycbzgAQ-ksElSEXXLy6rz42-FSwmvkBoaibCUt9Jy67BleBKbZ1Sg1DKk04oc56OMq0ll/exec",
     notificationPhone: "8305915970",
     notificationPhoneDisplay: "+91 83059 15970",
     notificationWhatsapp: "918305915970",

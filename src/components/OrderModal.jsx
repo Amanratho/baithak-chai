@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { siteData } from '../data';
-import { X, ShoppingBag, Truck, CheckCircle2, MessageCircle, Send, PhoneCall } from 'lucide-react';
+import { X, ShoppingBag, Truck, CheckCircle2, Loader2, ShieldCheck } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function OrderModal({ isOpen, onClose }) {
   const [quantity, setQuantity] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOrdered, setIsOrdered] = useState(false);
+  const [generatedOrderId, setGeneratedOrderId] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -20,50 +22,49 @@ export default function OrderModal({ isOpen, onClose }) {
   const totalPrice = unitPrice * quantity;
   const totalWeight = quantity * 500;
 
-  // Construct message for WhatsApp / SMS notification
-  const generateOrderMessage = () => {
-    return `📦 *NEW ORDER - NICE & GOOD BAITHAK TEA*
----------------------------------------
-👤 *Customer:* ${formData.name || 'Not Provided'}
-📱 *Phone:* ${formData.phone || 'Not Provided'}
-📍 *Address:* ${formData.address || 'Not Provided'}
-📮 *Pincode:* ${formData.pincode || 'Not Provided'}
----------------------------------------
-☕ *Product:* ${siteData.brand.name} - ${siteData.brand.productName}
-🔢 *Quantity:* ${quantity} Pack(s) (${totalWeight}g)
-💰 *Total Amount:* ₹${totalPrice}
-💳 *Payment Mode:* ${formData.paymentMethod}
-🚚 *Estimated Delivery:* ${siteData.orderSettings.estimatedDelivery}
----------------------------------------
-_Sent automatically via Baithak Tea Web Portal_`;
-  };
-
-  const getWhatsAppUrl = () => {
-    const text = encodeURIComponent(generateOrderMessage());
-    return `https://wa.me/${siteData.orderSettings.notificationWhatsapp}?text=${text}`;
-  };
-
-  const getSmsUrl = () => {
-    const text = encodeURIComponent(generateOrderMessage());
-    return `sms:+91${siteData.orderSettings.notificationPhone}?body=${text}`;
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsOrdered(true);
+    setIsSubmitting(true);
 
-    // Automatically trigger WhatsApp in new window/tab
-    try {
-      const whatsappUrl = getWhatsAppUrl();
-      window.open(whatsappUrl, '_blank');
-    } catch (err) {
-      console.log('Popup prevented, user can click the button directly');
+    const orderId = `BTK-${Math.floor(1000 + Math.random() * 9000)}`;
+    setGeneratedOrderId(orderId);
+
+    const payload = {
+      orderId: orderId,
+      name: formData.name,
+      phone: formData.phone,
+      address: formData.address,
+      pincode: formData.pincode,
+      quantity: quantity,
+      totalPrice: totalPrice,
+      paymentMethod: formData.paymentMethod,
+      timestamp: new Date().toISOString(),
+    };
+
+    // Send order data to Google Sheets in background (Zero WhatsApp interruption)
+    if (siteData.orderSettings.googleSheetEndpoint) {
+      try {
+        await fetch(siteData.orderSettings.googleSheetEndpoint, {
+          method: 'POST',
+          mode: 'no-cors', // Avoids CORS blocking
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8',
+          },
+          body: JSON.stringify(payload),
+        });
+      } catch (err) {
+        console.error('Sheet submission notice:', err);
+      }
     }
 
+    setIsSubmitting(false);
+    setIsOrdered(true);
+
+    // Celebratory Confetti
     try {
       confetti({
-        particleCount: 80,
-        spread: 70,
+        particleCount: 90,
+        spread: 75,
         origin: { y: 0.6 },
         colors: ['#D4AF37', '#F5D061', '#FFF0BD', '#FFFFFF'],
       });
@@ -74,11 +75,12 @@ _Sent automatically via Baithak Tea Web Portal_`;
 
   const handleReset = () => {
     setIsOrdered(false);
+    setIsSubmitting(false);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
       <div className="relative w-full max-w-lg rounded-3xl bg-[#071426] border border-[#D4AF37]/40 shadow-2xl p-6 sm:p-8 text-white max-h-[92vh] overflow-y-auto">
         {/* Close Button */}
         <button
@@ -89,8 +91,8 @@ _Sent automatically via Baithak Tea Web Portal_`;
         </button>
 
         {isOrdered ? (
-          /* Success Screen */
-          <div className="text-center py-5">
+          /* Success Screen (Clean E-Commerce, Zero WhatsApp Interruption) */
+          <div className="text-center py-6">
             <div className="w-16 h-16 rounded-full bg-[#D4AF37]/20 border border-[#D4AF37] text-[#F5D061] flex items-center justify-center mx-auto mb-3">
               <CheckCircle2 className="w-8 h-8 text-[#F5D061]" />
             </div>
@@ -98,58 +100,46 @@ _Sent automatically via Baithak Tea Web Portal_`;
             <span className="font-royal text-xs uppercase tracking-widest text-[#D4AF37] font-semibold">
               Order Placed Successfully
             </span>
-            <h3 className="font-display text-3xl font-bold text-white mt-1 mb-2">
+            <h3 className="font-display text-3xl font-bold text-white mt-1 mb-1">
               Thank You, {formData.name || 'Friend'}!
             </h3>
             
-            <p className="text-xs sm:text-sm text-[#A0B3CC] max-w-sm mx-auto leading-relaxed mb-5 font-light">
-              Your order details for <strong>{quantity} × {siteData.brand.productName} ({totalWeight}g)</strong> have been compiled. A notification is sent directly to dispatch at <strong>{siteData.orderSettings.notificationPhoneDisplay}</strong>.
-            </p>
-
-            {/* Direct WhatsApp Action Button */}
-            <div className="space-y-2.5 mb-5">
-              <a
-                href={getWhatsAppUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3.5 px-4 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-green-900/30 transition-all cursor-pointer"
-              >
-                <MessageCircle className="w-4 h-4 fill-white text-[#25D366]" />
-                <span>Send Order to WhatsApp ({siteData.orderSettings.notificationPhoneDisplay})</span>
-              </a>
-
-              <a
-                href={getSmsUrl()}
-                className="w-full py-2.5 px-4 rounded-full bg-[#0E2442] hover:bg-[#163660] border border-[#D4AF37]/30 text-[#E1D6C5] font-semibold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
-              >
-                <Send className="w-3.5 h-3.5 text-[#D4AF37]" />
-                <span>Send via SMS to {siteData.orderSettings.notificationPhoneDisplay}</span>
-              </a>
+            {/* Generated Order ID Badge */}
+            <div className="inline-block px-3.5 py-1 rounded-full bg-[#0D2444] border border-[#D4AF37]/40 text-[#F5D061] text-xs font-royal font-semibold tracking-wider my-2">
+              Order ID: {generatedOrderId}
             </div>
 
-            {/* Order Summary Receipt */}
-            <div className="p-4 rounded-2xl glass-navy border border-[#D4AF37]/30 text-left text-xs text-[#CBD8E8] space-y-1.5 mb-5">
-              <div className="flex justify-between">
-                <span>Total Amount Payable:</span>
+            <p className="text-xs sm:text-sm text-[#A0B3CC] max-w-sm mx-auto leading-relaxed mb-6 font-light">
+              Your order for <strong>{quantity} × {siteData.brand.productName} ({totalWeight}g)</strong> has been recorded in our dispatch system. Our team will verify and dispatch your pack shortly.
+            </p>
+
+            {/* Order Receipt Card */}
+            <div className="p-4 rounded-2xl glass-navy border border-[#D4AF37]/30 text-left text-xs text-[#CBD8E8] space-y-2 mb-6">
+              <div className="flex justify-between border-b border-[#1A3152] pb-1.5">
+                <span className="text-[#8FA5BE]">Product:</span>
+                <span className="font-medium text-white">{siteData.brand.name} - {siteData.brand.productName}</span>
+              </div>
+              <div className="flex justify-between border-b border-[#1A3152] pb-1.5">
+                <span className="text-[#8FA5BE]">Quantity:</span>
+                <span className="font-medium text-white">{quantity} Pack(s) ({totalWeight}g)</span>
+              </div>
+              <div className="flex justify-between border-b border-[#1A3152] pb-1.5">
+                <span className="text-[#8FA5BE]">Total Amount:</span>
                 <strong className="text-[#F5D061] text-sm">₹{totalPrice}</strong>
               </div>
-              <div className="flex justify-between">
-                <span>Payment Mode:</span>
+              <div className="flex justify-between border-b border-[#1A3152] pb-1.5">
+                <span className="text-[#8FA5BE]">Payment Mode:</span>
                 <span className="uppercase font-semibold text-white">{formData.paymentMethod}</span>
               </div>
-              <div className="flex justify-between">
-                <span>Estimated Delivery:</span>
+              <div className="flex justify-between pt-0.5">
+                <span className="text-[#8FA5BE]">Estimated Delivery:</span>
                 <span className="text-emerald-400 font-semibold">{siteData.orderSettings.estimatedDelivery}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Dispatch Helpline:</span>
-                <span className="text-[#D4AF37] font-semibold">{siteData.orderSettings.notificationPhoneDisplay}</span>
               </div>
             </div>
 
             <button
               onClick={handleReset}
-              className="w-full py-3 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B38612] text-[#050D1A] font-bold text-xs uppercase tracking-wider hover:scale-102 transition-all cursor-pointer"
+              className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B38612] text-[#050D1A] font-bold text-xs uppercase tracking-wider hover:scale-102 transition-all cursor-pointer shadow-lg"
             >
               Continue Browsing
             </button>
@@ -277,10 +267,20 @@ _Sent automatically via Baithak Tea Web Portal_`;
               {/* Submit CTA */}
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#ECC440] via-[#D4AF37] to-[#B38612] text-[#050D1A] font-bold text-xs uppercase tracking-wider shadow-lg gold-glow hover:scale-102 active:scale-98 transition-all cursor-pointer flex items-center justify-center gap-2"
+                disabled={isSubmitting}
+                className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#ECC440] via-[#D4AF37] to-[#B38612] text-[#050D1A] font-bold text-xs uppercase tracking-wider shadow-lg gold-glow hover:scale-102 active:scale-98 transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-75"
               >
-                <ShoppingBag className="w-4 h-4 text-[#050D1A]" />
-                <span>Confirm Order · ₹{totalPrice}</span>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-[#050D1A]" />
+                    <span>Placing Your Order...</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag className="w-4 h-4 text-[#050D1A]" />
+                    <span>Confirm Order · ₹{totalPrice}</span>
+                  </>
+                )}
               </button>
 
               <div className="flex items-center justify-center gap-2 text-[10px] text-[#8EA2BC]">
