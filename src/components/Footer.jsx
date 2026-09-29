@@ -1,6 +1,6 @@
 import React from 'react';
 import { siteData } from '../data';
-import { ShieldCheck, Mail, Phone, MapPin, Sparkles, Heart } from 'lucide-react';
+import { ShieldCheck, Mail, Phone, Sparkles, Heart } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -48,7 +48,7 @@ export default function Footer() {
             </div>
 
             <p className="text-xs sm:text-sm text-[#8EA2BC] font-light max-w-md leading-relaxed">
-              {siteData.footer.tagline}. Chai pe baithak, apnon ka saath, aur har ghoont me bemisaal kadak swad.
+              {siteData.footer.tagline}. Bringing people together over the finest, richest Upper Assam kadak chai.
             </p>
 
             {/* Regulatory & FSSAI Details */}
@@ -63,33 +63,29 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Customer Care & Address */}
+          {/* Consumer Care & Contact Details (No Address) */}
           <div className="md:col-span-6 space-y-3 text-xs text-[#9EB3CC]">
             <h5 className="font-royal text-xs sm:text-sm font-semibold uppercase tracking-widest text-[#D4AF37]">
-              Customer Care & Contact
+              Consumer Care & Inquiries
             </h5>
 
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               <a
                 href={`mailto:${siteData.footer.contactEmail}`}
-                className="flex items-center gap-2 hover:text-[#D4AF37] transition-colors"
+                className="flex items-center gap-2.5 hover:text-[#D4AF37] transition-colors"
               >
-                <Mail className="w-4 h-4 text-[#D4AF37]" />
-                <span>{siteData.footer.contactEmail}</span>
+                <Mail className="w-4 h-4 text-[#D4AF37] shrink-0" />
+                <span className="text-sm text-[#E2EAF4] hover:underline">{siteData.footer.contactEmail}</span>
               </a>
 
               <a
                 href={`tel:${siteData.footer.contactPhone}`}
-                className="flex items-center gap-2 hover:text-[#D4AF37] transition-colors"
+                className="flex items-center gap-2.5 hover:text-[#D4AF37] transition-colors"
               >
-                <Phone className="w-4 h-4 text-[#D4AF37]" />
-                <span>{siteData.footer.contactPhone} ({siteData.footer.website})</span>
+                <Phone className="w-4 h-4 text-[#D4AF37] shrink-0" />
+                <span className="text-sm text-[#E2EAF4] font-medium">{siteData.footer.contactPhone}</span>
+                <span className="text-[11px] text-[#7E93AC]">(Mon - Sat, 9:00 AM - 7:00 PM IST)</span>
               </a>
-
-              <div className="flex items-start gap-2 pt-0.5 text-[#8EA2BC]">
-                <MapPin className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
-                <span>{siteData.footer.address}</span>
-              </div>
             </div>
           </div>
         </div>
@@ -98,7 +94,7 @@ export default function Footer() {
         <div className="pt-6 border-t border-[#13253E] flex flex-col sm:flex-row items-center justify-between text-xs text-[#6F8299] gap-3">
           <p>{siteData.footer.copyright}</p>
           <p className="flex items-center gap-1 text-[#8FA3BC]">
-            Dil se banayi gayi chai <Heart className="w-3.5 h-3.5 text-[#D4AF37] fill-[#D4AF37]" /> apnon ke liye.
+            Brewed with <Heart className="w-3.5 h-3.5 text-[#D4AF37] fill-[#D4AF37]" /> for heartfelt moments.
           </p>
         </div>
       </div>

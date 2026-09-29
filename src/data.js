@@ -19,10 +19,9 @@ export const siteData = {
     discountBadge: "New Fresh Packaging",
     originalPrice: 350,
     fssaiLicense: "FSSAI Lic. No. 13323999000125",
-    customerCare: "care@niceandgood.in",
-    helpline: "+91 98765 43210",
+    customerCare: "contact.niceandgood@gmail.com",
+    helpline: "+91 83059-15970",
     website: "www.niceandgood.in",
-    address: "NICE & GOOD FOODS PVT. LTD., Gurugram, Haryana - 122001, India",
     origin: "Upper Brahmaputra Valley, Assam, India",
     grade: "Premium Royal CTC Granules (100% Pure Assam Blend)",
     batchNo: "NG-BTH-0501",
@@ -33,7 +32,7 @@ export const siteData = {
   orderSettings: {
     googleSheetEndpoint: "https://script.google.com/macros/s/AKfycbzgAQ-ksElSEXXLy6rz42-FSwmvkBoaibCUt9Jy67BleBKbZ1Sg1DKk04oc56OMq0ll/exec",
     notificationPhone: "8305915970",
-    notificationPhoneDisplay: "+91 83059 15970",
+    notificationPhoneDisplay: "+91 83059-15970",
     notificationWhatsapp: "918305915970",
     estimatedDelivery: "Within 7 Days",
     shippingCharge: "FREE",
@@ -78,7 +77,7 @@ export const siteData = {
     floatingBadges: [
       {
         id: "veg",
-        title: "100% Vegetarian",
+        title: "100% Pure ",
         desc: "Certified green dot pure vegetarian formulation with zero artificial flavor enhancers.",
         icon: "Leaf",
       },
@@ -218,10 +217,9 @@ export const siteData = {
     companyName: "NICE & GOOD FOODS PVT. LTD.",
     tagline: "GOOD PRODUCTS · BETTER MOMENTS · HAPPIER PEOPLE",
     fssaiText: "FSSAI Lic. No. 13323999000125",
-    contactEmail: "care@niceandgood.in",
-    contactPhone: "+91 98765 43210",
+    contactEmail: "contact.niceandgood@gmail.com",
+    contactPhone: "+91 83059-15970",
     website: "www.niceandgood.in",
-    address: "Gurugram, Haryana - 122001, India",
     copyright: "© 2026 NICE & GOOD FOODS PVT. LTD. All Rights Reserved.",
     trustBadges: [
       "100% Certified Vegetarian",
